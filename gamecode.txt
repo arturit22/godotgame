@@ -1,0 +1,226 @@
+extends Area2D
+ 
+func _physics_process(_delta):
+	var objs = get_overlapping_bodies()
+	for obj in objs:
+		if obj.name=="Player":
+			get_tree().change_scene("res://gameover.tscn")
+
+extends Area2D
+
+
+
+
+
+
+func _on_Coin_body_entered(body):
+	if body.has_method("GetCoin"):
+		body.GetCoin()
+		queue_free()
+extends CollisionShape2D
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
+
+
+# Called when the node enters the scene tree for the first time.
+func _on_CollisionShape2D_entered(collision):
+	if collision.get_name()=="Player":
+		get_tree().change_scene("res://gameover.tscn")
+
+extends Control
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+func _on_Button_pressed():
+	get_tree().quit()
+
+extends Control
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+
+func _on_Restart_pressed():
+	get_tree().change_scene("res://Level1.tscn")
+func _on_Menu_pressed():
+	get_tree().change_scene("res://menu.tscn")
+	
+
+extends Control
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+func _on_Restart_pressed():
+	get_tree().change_scene("res://level2.tscn")
+func _on_Menu_pressed():
+	get_tree().change_scene("res://menu.tscn")
+
+extends Area2D
+
+
+func _physics_process(_delta):
+	var objs = get_overlapping_bodies()
+	for obj in objs:
+		if obj.name=="KinematicBody2D":
+			get_tree().change_scene("res://level2fall.tscn")
+
+extends Area2D
+
+
+func _physics_process(_delta):
+	var objs = get_overlapping_bodies()
+	for obj in objs:
+		if obj.name=="KinematicBody2D":
+			get_tree().change_scene("res://finish.tscn")
+
+extends Area2D
+
+
+func _physics_process(_delta):
+	var objs = get_overlapping_bodies()
+	for obj in objs:
+		if obj.name=="Player":
+			get_tree().change_scene("res://level2.tscn")
+
+extends Control
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+
+func _on_Start_pressed():
+	get_tree().change_scene("res://Level1.tscn")
+
+
+func _on_Exit_pressed():
+	get_tree().quit()
+
+extends KinematicBody2D
+var label = null
+var coins = 0
+var textureProgress : TextureProgress
+const SPEED = 225
+const ACCEL = 50
+const UP = Vector2(0,-1) 
+const GRAV = 75
+const JUMPHIGH = -1100
+var hp = 100
+var motion = Vector2()
+
+
+func _ready():
+	label = $Label
+func _physics_process(delta):
+	motion.y += GRAV
+	run()
+	jump()
+	motion = move_and_slide(motion, UP) 
+
+
+func run():
+	if Input.is_action_pressed("ui_right") and not Input.is_action_pressed("ui_left"):
+		motion.x = SPEED
+		$AnimatedSprite.flip_h = false
+		$AnimatedSprite.play("run")
+		motion.x += ACCEL
+		motion.x = min(SPEED, motion.x)
+	elif Input.is_action_pressed("ui_left") and not Input.is_action_pressed("ui_right"):
+		motion.x = -SPEED
+		$AnimatedSprite.flip_h = true
+		$AnimatedSprite.play("run")
+		motion.x += ACCEL
+		motion.x = min(-SPEED, motion.x)
+	else:
+		motion.x = 0
+		$AnimatedSprite.play("idle")
+ 
+func jump():
+	if is_on_floor(): 
+		if Input.is_action_pressed("ui_up"):
+			motion.y = JUMPHIGH
+	else:
+		$AnimatedSprite.play("jump")
+		
+func GetCoin():
+	coins += 1
+	label.text = "Coins: " + str(coins)
+
+
+extends Button
+
+
+
+
+
+
+func _ready():
+	pass	
+
+
+func _on_Start_pressed():
+	get_tree().change_scene("res://Level1.tscn")
+extends Control
+
+
+# Declare member variables here. Examples:
+# var a = 2
+# var b = "text"
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _process(delta):
+#	pass
+
+
+func _on_Button_pressed():
+	get_tree().change_scene("res://menu.tscn")
+
